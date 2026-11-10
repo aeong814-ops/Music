@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#171714"><title>hearthisong — music, collected</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar"><a class="wordmark" href="#home" onclick="showPage('home')">hearthisong<span>.</span></a><nav><button class="nav-link active" id="nav-discover" onclick="showPage('home')">DISCOVER</button><button class="nav-link" id="nav-mine" onclick="showPage('mine')">MY LIBRARY</button></nav><div class="account"><span id="user-label">GUEST</span><button class="outline small" id="auth-button" onclick="openAuth()">LOG IN</button></div></header>
+  <main>
+    <section id="page-home" class="page">
+      <div class="hero"><div><p class="kicker">A LITTLE PLACE FOR THE SONGS YOU LOVE</p><h1>Keep the songs.<br><i>Keep the feeling.</i></h1><p class="hero-copy">좋아하는 노래를 모으고, 나만의 취향을 기록하고,<br>친구들의 플레이리스트를 발견하는 공간.</p></div><div class="hero-art"><span class="orbit o1"></span><span class="orbit o2"></span><span class="art-note">♪</span><small>YOUR SOUND, YOUR STORY</small></div></div>
+      <div class="section-head"><div><p class="kicker">FROM THE COMMUNITY</p><h2>Discover playlists</h2><p class="sub">사람들이 공개한 음악 컬렉션을 둘러봐.</p></div><div class="search-wrap"><input id="discover-search" placeholder="플레이리스트 검색" oninput="loadDiscover()"></div></div>
+      <div id="discover-grid" class="playlist-grid"><div class="empty-state">공개 플레이리스트를 불러오는 중...</div></div>
+    </section>
+    <section id="page-mine" class="page hidden">
+      <div class="page-intro"><p class="kicker">YOUR PERSONAL ARCHIVE</p><h1>My library<span>.</span></h1><p class="sub">내가 모은 노래와 플레이리스트.</p></div>
+      <div class="section-head"><div><h2>My playlists</h2><p class="sub">친구들과 공유할 컬렉션을 만들어 봐.</p></div><button class="dark-button" onclick="createPlaylist()">＋ NEW PLAYLIST</button></div>
+      <div id="mine-grid" class="playlist-grid"><div class="empty-state">로그인하면 나만의 플레이리스트를 만들 수 있어.</div></div>
+      <div class="section-head liked-head"><div><h2>Liked playlists</h2><p class="sub">마음에 들어서 저장한 다른 사람들의 컬렉션.</p></div></div><div id="liked-grid" class="playlist-grid"></div>
+    </section>
+    <section id="page-detail" class="page hidden"><button class="back-link" onclick="showPage(previousPage)">← BACK</button><div id="detail-content"></div></section>
+  </main>
+  <footer><span>hearthisong.</span><span>COLLECT WHAT YOU LOVE.</span></footer>
+</div>
+<div id="player-dock" class="player-dock hidden"><div class="playing-meta"><div class="playing-art">♫</div><div><b id="playing-title">Choose a song</b><small id="playing-artist">Your next favorite is waiting</small></div></div><div class="player-center"><div class="player-controls"><button onclick="playPrevious()" aria-label="previous">Ⅱ◀</button><button class="play-main" onclick="togglePlayback()" id="play-toggle">▶</button><button onclick="playNext()" aria-label="next">▶Ⅱ</button></div><small id="player-status">YOUTUBE PLAYER</small></div><button class="close-player" onclick="closePlayer()">×</button></div>
+<div id="auth-modal" class="modal"><div class="modal-card"><button class="modal-x" onclick="closeModal('auth-modal')">×</button><p class="kicker">WELCOME TO HEARTHISONG</p><h2 id="auth-title">Log in</h2><label>이메일<input id="auth-email" type="email" placeholder="you@example.com" autocomplete="email"></label><label>비밀번호<input id="auth-password" type="password" placeholder="비밀번호 (6자 이상)" autocomplete="current-password"></label><label id="nickname-wrap" class="hidden">닉네임<input id="auth-nickname" maxlength="24" placeholder="친구들에게 보여질 이름"></label><button class="dark-button full" id="auth-submit" onclick="submitAuth()">LOG IN</button><p class="switch-auth"><span id="auth-switch-copy">아직 계정이 없어?</span> <button onclick="toggleAuthMode()" id="auth-switch">회원가입</button></p><p class="fine-print">실제 이메일 인증 설정에 따라 가입 확인 메일이 발송될 수 있어.</p></div></div>
+<div id="song-modal" class="modal"><div class="modal-card"><button class="modal-x" onclick="closeModal('song-modal')">×</button><p class="kicker">ADD A TRACK</p><h2>Bring a song in.</h2><label>YouTube 링크<input id="track-url" placeholder="https://youtu.be/..." inputmode="url"></label><label>노래 제목<input id="track-title" placeholder="노래 제목"></label><label>가수<input id="track-artist" placeholder="가수 이름"></label><button class="dark-button full" onclick="submitTrack()">ADD TO PLAYLIST</button><p class="fine-print">YouTube에서 공유 → 링크 복사를 눌러 붙여넣어 줘. 임베드가 허용되지 않은 영상은 재생되지 않을 수 있어.</p></div></div>
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body></html>
